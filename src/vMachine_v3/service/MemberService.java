@@ -21,6 +21,6 @@ public class MemberService {
     }
 
     public MemberDto login(String userId, String password) {
-        return repository.findMember(userId, password);
+        return repository.findMemberByUserId(userId);
     }
 }

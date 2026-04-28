@@ -1,5 +1,6 @@
 package vMachine_v3.repository;
 
+import vMachine_v3.dto.DrinkDto;
 import vMachine_v3.dto.MemberDto;
 
 import java.sql.Connection;
@@ -94,5 +95,11 @@ public class Repository {
             System.out.println("findMember() 오류: " + e.getMessage());
         }
         return memberDto;
+    }
+
+    public List<DrinkDto> getAllDrink() {
+        List<DrinkDto> drinkDtoList = new ArrayList<>();
+
+        return drinkDtoList;
     }
 }

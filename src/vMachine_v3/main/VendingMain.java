@@ -3,7 +3,9 @@ package vMachine_v3.main;
 import vMachine_v3.db.DBConn;
 import vMachine_v3.dto.MemberDto;
 import vMachine_v3.repository.Repository;
+import vMachine_v3.service.DrinkService;
 import vMachine_v3.service.MemberService;
+import vMachine_v3.service.SalesService;
 import vMachine_v3.view.AdminView;
 import vMachine_v3.view.LoginView;
 import vMachine_v3.view.MemberView;
@@ -16,8 +18,10 @@ public class VendingMain {
         Scanner sc = new Scanner(System.in);
         Connection conn = DBConn.getConnection();
         Repository repository = new Repository(conn);
+        SalesService salesService = new SalesService(repository);
+        DrinkService drinkService = new DrinkService(repository);
         MemberService memberService = new MemberService(repository);
-        MemberView memberView = new MemberView(memberService, sc);
+        MemberView memberView = new MemberView(memberService, drinkService, sc);
         LoginView loginView = new LoginView(memberService, sc);
         AdminView adminView = new AdminView();
 

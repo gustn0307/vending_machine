@@ -6,9 +6,49 @@ public class MemberDto {
     private String password;
     private String name;
     private String tel;
-    private  int balance;
+    private int balance = 0;
     private String cardNum;
-    private boolean isAdmin;
+    private boolean isAdmin = false;
+
+    public MemberDto(int id, String userId, String password, String name, String tel, int balance, String cardNum, boolean isAdmin) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.tel = tel;
+        this.balance = balance;
+        this.cardNum = cardNum;
+        this.isAdmin = isAdmin;
+    }
+
+    public MemberDto(int id, String userId, String password, String name, String tel, int balance, String cardNum) {
+        this.id = id;
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.tel = tel;
+        this.balance = balance;
+        this.cardNum = cardNum;
+    }
+
+    public MemberDto(String userId, String password, String name, String tel, String cardNum) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.tel = tel;
+        this.cardNum = cardNum;
+    }
+
+
+    public MemberDto(String userId, String password) {
+        this.userId = userId;
+        this.password = password;
+    }
+
+    public MemberDto() {
+
+    }
+
 
     public int getId() {
         return id;

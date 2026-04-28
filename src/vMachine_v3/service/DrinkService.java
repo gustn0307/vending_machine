@@ -15,4 +15,8 @@ public class DrinkService {
     public List<DrinkDto> getAll() {
         return repository.getAllDrink();
     }
+
+    public int sell(int id, int menuId) {
+        return repository.sell(id, menuId);
+    }
 }

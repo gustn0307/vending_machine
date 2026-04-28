@@ -4,6 +4,7 @@ import vMachine_v3.dto.DrinkDto;
 import vMachine_v3.dto.MemberDto;
 import vMachine_v3.service.DrinkService;
 import vMachine_v3.service.MemberService;
+import vMachine_v3.service.SalesService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,14 @@ import java.util.Scanner;
 public class MemberView {
     private final MemberService memberService;
     private final DrinkService drinkService;
+    private final SalesService salesService;
     private final Scanner sc;
 
 
-    public MemberView(MemberService memberService, DrinkService drinkService, Scanner sc) {
+    public MemberView(MemberService memberService, DrinkService drinkService, SalesService salesService, Scanner sc) {
         this.memberService = memberService;
         this.drinkService = drinkService;
+        this.salesService = salesService;
         this.sc = sc;
     }
 
@@ -106,10 +109,9 @@ public class MemberView {
             System.out.println("5. 로그아웃");
             System.out.print(">  ");
             int choice = sc.nextInt();
-
+            List<DrinkDto> drinkDtoList = drinkService.getAll();
             switch (choice){
                 case 1: // 메뉴보기
-                    List<DrinkDto> drinkDtoList = drinkService.getAll();
                     System.out.println("ID      제품명     가격      재고");
                     System.out.println("-----------------------------");
                     for (DrinkDto dto : drinkDtoList) {
@@ -117,6 +119,25 @@ public class MemberView {
                     }
                     break;
                 case 2: // 음료 구매
+                    System.out.print("구매할 음료 ID: ");
+                    int menuId = sc.nextInt(); // @@음료 리스트의 ID 중 하나 인지 체크 구현 필요@@
+
+                    for (DrinkDto dto : drinkDtoList){ // 잔액 부족, 재고 0 이면 구매 불가
+                        if (dto.getId() == menuId) {
+                            if (dto.getStock() == 0){ // 재고 부족
+                                System.out.println("재고가 없어 구매 불가합니다.");
+                                break;
+                            }
+                            if (memberDto.getBalance() < dto.getPrice()){ // 잔액 부족
+                                System.out.println("잔액 부족하여 구매 불가합니다.");
+                                break;
+                            }
+                        }
+                    }
+                    int success = drinkService.sell(memberDto.getId(), menuId); // 구매, sales 테이블에 기록
+                    if (success == 1)
+                        System.out.println("구매 완료");
+                    System.out.println("잔액: " + memberDto.getBalance());
                     break;
                 case 3: // 금액 충전
                     break;

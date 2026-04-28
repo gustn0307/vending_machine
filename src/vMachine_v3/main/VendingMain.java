@@ -21,7 +21,7 @@ public class VendingMain {
         SalesService salesService = new SalesService(repository);
         DrinkService drinkService = new DrinkService(repository);
         MemberService memberService = new MemberService(repository);
-        MemberView memberView = new MemberView(memberService, drinkService, sc);
+        MemberView memberView = new MemberView(memberService, drinkService, salesService, sc);
         LoginView loginView = new LoginView(memberService, sc);
         AdminView adminView = new AdminView();
 

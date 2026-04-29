@@ -204,7 +204,21 @@ public class Repository {
             result = psmt.executeUpdate();
 
             sql = "UPDATE vending_menu SET stock = ? WHERE id = ?"; // 음료 재고 줄이기
-            
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, drinkDto.getStock() - 1);
+            psmt.setInt(2, drinkDto.getId());
+
+            result = psmt.executeUpdate();
+
+            sql = "INSERT INTO sales (id, member_id, menu_id) values (?, ?, ?)"; // 멤버의 구매 내역 sales 테이블에 기록
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, id);
+            psmt.setInt(2, menuId);
+            psmt.setInt(3, drinkDto.getPrice());
+
+            result = psmt.executeUpdate();
+
+            psmt.close(); // 사용 후 닫아주기
         } catch (Exception e) {
             System.out.println("sell() 오류: " + e.getMessage());
         }

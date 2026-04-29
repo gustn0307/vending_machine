@@ -119,6 +119,7 @@ public class MemberView {
                     }
                     break;
                 case 2: // 음료 구매
+                    System.out.println("음료구매 창입니다.");
                     System.out.print("구매할 음료 ID: ");
                     int menuId = sc.nextInt(); // @@음료 리스트의 ID 중 하나 인지 체크 구현 필요@@
 
@@ -140,8 +141,28 @@ public class MemberView {
                     System.out.println("잔액: " + memberDto.getBalance());
                     break;
                 case 3: // 금액 충전
+                    System.out.println("금액 충전 창입니다.");
+                    int addBalance = 0;
+
+                    do {
+                        System.out.print("충전할 금액(1,000원 단위): ");
+                        addBalance = sc.nextInt();
+                        sc.nextLine(); // 버퍼 비우기
+                        if ((addBalance%1000) != 0)
+                            System.out.println("1,000원 단위로 입력해주세요.");
+                        if (addBalance < 0)
+                            System.out.println("음수 입력 불가! 다시 입력하세요.");
+                    }while ((addBalance%1000) != 0 || addBalance < 0);
+
+                    memberDto.setBalance(memberDto.getBalance() + addBalance);
+                    int result = memberService.update(memberDto);
+                    if (result == 1)
+                        System.out.println("금액 충전 성공");
+                    else
+                        System.out.println("금액 충전 실패");
                     break;
                 case 4: // 구매 내역
+                    System.out.println("구매일시            제품명     금액");
                     break;
                 case 5: // 로그아웃
                     System.out.println("로그아웃 합니다.");

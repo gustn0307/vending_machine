@@ -2,6 +2,7 @@ package vMachine_v3.view;
 
 import vMachine_v3.dto.DrinkDto;
 import vMachine_v3.dto.MemberDto;
+import vMachine_v3.dto.SalesDto;
 import vMachine_v3.service.DrinkService;
 import vMachine_v3.service.MemberService;
 import vMachine_v3.service.SalesService;
@@ -102,6 +103,7 @@ public class MemberView {
         System.out.println("안녕하세요, [" + memberDto.getName() + "]님! 잔액: [" + memberDto.getBalance() + "]원");
         System.out.println("===========================================");
         while (true){
+            System.out.println();
             System.out.println("1. 메뉴보기");
             System.out.println("2. 음료 구매");
             System.out.println("3. 금액 충전");
@@ -117,6 +119,7 @@ public class MemberView {
                     for (DrinkDto dto : drinkDtoList) {
                         System.out.println(dto);
                     }
+                    System.out.println("-----------------------------");
                     break;
                 case 2: // 음료 구매
                     System.out.println("음료구매 창입니다.");
@@ -127,18 +130,22 @@ public class MemberView {
                         if (dto.getId() == menuId) {
                             if (dto.getStock() == 0){ // 재고 부족
                                 System.out.println("재고가 없어 구매 불가합니다.");
-                                break;
+                                return;
                             }
                             if (memberDto.getBalance() < dto.getPrice()){ // 잔액 부족
                                 System.out.println("잔액 부족하여 구매 불가합니다.");
-                                break;
+                                return;
                             }
                         }
                     }
                     int success = drinkService.sell(memberDto.getId(), menuId); // 구매, sales 테이블에 기록
                     if (success == 1)
                         System.out.println("구매 완료");
-                    System.out.println("잔액: " + memberDto.getBalance());
+                    else
+                        System.out.println("구매 실패");
+                    // 구매 후 balance 변경되므로 DB에서 새로 찾아오기
+                    MemberDto afterSellMemberDto = memberService.findById(memberDto.getId());
+                    System.out.println("잔액: " + afterSellMemberDto.getBalance());
                     break;
                 case 3: // 금액 충전
                     System.out.println("금액 충전 창입니다.");
@@ -162,7 +169,18 @@ public class MemberView {
                         System.out.println("금액 충전 실패");
                     break;
                 case 4: // 구매 내역
-                    System.out.println("구매일시            제품명     금액");
+                    List<SalesDto> salesDtoList = salesService.getByMember(memberDto.getId());
+                    int total = 0;
+
+                    System.out.println("구매일시                            제품명     금액");
+                    System.out.println("-------------------------------------------");
+                    for (SalesDto salesDto : salesDtoList) {
+                        DrinkDto drinkDto = drinkService.getById(salesDto.getMenu_id());
+                        System.out.println(salesDto.getSold_at()+"\t\t"+drinkDto.getName() + "\t\t" + drinkDto.getPrice()+"원");
+                        total += drinkDto.getPrice();
+                    }
+                    System.out.println("-------------------------------------------");
+                    System.out.println("총 구매금액: " + total);
                     break;
                 case 5: // 로그아웃
                     System.out.println("로그아웃 합니다.");

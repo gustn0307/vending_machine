@@ -2,10 +2,12 @@ package vMachine_v3.repository;
 
 import vMachine_v3.dto.DrinkDto;
 import vMachine_v3.dto.MemberDto;
+import vMachine_v3.dto.SalesDto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,15 +70,16 @@ public class Repository {
         return memberDtoList;
     }
 
-    public MemberDto findMemberByUserId(String userId) {
+    public MemberDto findMemberByUserId(String userId, String password) {
         MemberDto memberDto = new MemberDto();
         PreparedStatement psmt = null;
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT * FROM member WHERE user_id = ?";
+            String sql = "SELECT * FROM member WHERE user_id = ? AND password = ?";
             psmt = conn.prepareStatement(sql);
             psmt.setString(1, userId);
+            psmt.setString(2, password);
 
             rs = psmt.executeQuery();
 
@@ -187,18 +190,18 @@ public class Repository {
 
     // 멤버의 잔액 줄이고, 음료의 재고 줄이고 멤버의 구매 내역 sales 테이블에 기록
     // -> 쿼리 3개 필요
-    public int sell(int id, int menuId) {
+    public int sell(int memberId, int menuId) {
         int result = 0;
         PreparedStatement psmt = null;
-        MemberDto memberDto = findMemberById(id);
+        MemberDto memberDto = findMemberById(memberId);
         DrinkDto drinkDto = findDrinkById(menuId);
 
         try {
             String sql = "UPDATE member SET balance = ? WHERE id = ?"; // 멤버 잔액 줄이기
             psmt = conn.prepareStatement(sql);
             psmt.setInt(1, memberDto.getBalance() - drinkDto.getPrice());
-            psmt.setInt(2, id);
-// ##########여기부터##################
+            psmt.setInt(2, memberId);
+
             result = psmt.executeUpdate();
 
             sql = "UPDATE vending_menu SET stock = ? WHERE id = ?"; // 음료 재고 줄이기
@@ -208,9 +211,9 @@ public class Repository {
 
             result = psmt.executeUpdate();
 
-            sql = "INSERT INTO sales (id, member_id, menu_id) values (?, ?, ?)"; // 멤버의 구매 내역 sales 테이블에 기록
+            sql = "INSERT INTO sales (member_id, menu_id, price) values (?, ?, ?)"; // 멤버의 구매 내역 sales 테이블에 기록
             psmt = conn.prepareStatement(sql);
-            psmt.setInt(1, id);
+            psmt.setInt(1, memberId);
             psmt.setInt(2, menuId);
             psmt.setInt(3, drinkDto.getPrice());
 
@@ -245,5 +248,35 @@ public class Repository {
             System.out.println("update() 오류: " + e.getMessage());
         }
         return result;
+    }
+
+    public List<SalesDto> findAllSalesByMember(int id) {
+        List<SalesDto> salesDtoList = new ArrayList<>();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM sales WHERE member_id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, id);
+
+            rs = psmt.executeQuery();
+
+            while (rs.next()) {
+                SalesDto salesDto = new SalesDto(
+                        rs.getInt("id"),
+                        id,
+                        rs.getInt("menu_id"),
+                        rs.getInt("price"),
+                        rs.getObject("sold_at", LocalDateTime.class)
+                );
+                salesDtoList.add(salesDto);
+            }
+            psmt.close(); // 사용 후 닫아주기
+            rs.close(); // 사용 후 닫아주기
+        } catch (Exception e) {
+            System.out.println("findAllSalesByMember() 오류: " + e.getMessage());
+        }
+        return salesDtoList;
     }
 }

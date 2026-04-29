@@ -98,7 +98,7 @@ public class Repository {
         return memberDto;
     }
 
-    public MemberDto findMemberById(int id){
+    public MemberDto findMemberById(int id) {
         MemberDto memberDto = new MemberDto();
         PreparedStatement psmt = null;
         ResultSet rs = null;
@@ -158,7 +158,7 @@ public class Repository {
         return drinkDtoList;
     }
 
-    public DrinkDto findDrinkById(int menuId){
+    public DrinkDto findDrinkById(int menuId) {
         DrinkDto drinkDto = new DrinkDto();
         PreparedStatement psmt = null;
         ResultSet rs = null;
@@ -170,7 +170,7 @@ public class Repository {
 
             rs = psmt.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 drinkDto.setId(rs.getInt("id"));
                 drinkDto.setName(rs.getString("name"));
                 drinkDto.setPrice(rs.getInt("price"));
@@ -184,8 +184,6 @@ public class Repository {
 
         return drinkDto;
     }
-
-
 
     // 멤버의 잔액 줄이고, 음료의 재고 줄이고 멤버의 구매 내역 sales 테이블에 기록
     // -> 쿼리 3개 필요
@@ -221,6 +219,30 @@ public class Repository {
             psmt.close(); // 사용 후 닫아주기
         } catch (Exception e) {
             System.out.println("sell() 오류: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public int update(MemberDto memberDto) {
+        PreparedStatement psmt = null;
+        int result = 0;
+
+        try {
+            String sql = "UPDATE member SET user_id = ?, password = ?, name = ?, tel = ?, balance = ?, card_num = ? WHERE id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setString(1, memberDto.getUserId());
+            psmt.setString(2, memberDto.getPassword());
+            psmt.setString(3, memberDto.getName());
+            psmt.setString(4, memberDto.getTel());
+            psmt.setInt(5, memberDto.getBalance());
+            psmt.setString(6, memberDto.getCardNum());
+            psmt.setInt(7, memberDto.getId());
+
+            result = psmt.executeUpdate();
+
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("update() 오류: " + e.getMessage());
         }
         return result;
     }

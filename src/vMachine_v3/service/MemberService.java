@@ -21,10 +21,14 @@ public class MemberService {
     }
 
     public MemberDto login(String userId, String password) {
-        return repository.findMemberByUserId(userId);
+        return repository.findMemberByUserId(userId, password);
     }
 
     public int update(MemberDto memberDto) {
         return repository.update(memberDto);
+    }
+
+    public MemberDto findById(int id) {
+        return repository.findMemberById(id);
     }
 }

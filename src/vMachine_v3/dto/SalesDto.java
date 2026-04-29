@@ -49,12 +49,14 @@ public class SalesDto {
         this.sold_at = sold_at;
     }
 
-    public SalesDto(int id, int member_id, int menu_id, int price) {
+    public SalesDto(int id, int member_id, int menu_id, int price, LocalDateTime sold_at) {
         this.id = id;
         this.member_id = member_id;
         this.menu_id = menu_id;
         this.price = price;
-        sold_at = LocalDateTime.now();
+        this.sold_at = sold_at;
     }
 
+    public SalesDto() {
+    }
 }

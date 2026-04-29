@@ -15,7 +15,7 @@ public class LoginView {
     }
 
     public MemberDto login() {
-        System.out.print("ID: ");
+        System.out.print("ID: "); // user_id
         String userId = sc.nextLine();
         System.out.print("비밀번호: ");
         String password = sc.nextLine();

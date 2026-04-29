@@ -46,11 +46,14 @@ public class VendingMain {
                     break;
                 case 2: // 로그인(사용자or관리자)
                     MemberDto memberDto = loginView.login(); // 사용자인지 관리자인지 판별
-                    if (!memberDto.getIsAdmin()) {
-                        memberView.login(memberDto); // 사용자 로그인 된 후 화면
-                    } else {
-                        adminView.login(memberDto); // 관리자 로그인 된 후 화면
-                    }
+                    if (memberDto.getId() != 0){ // 로그인 성공 시
+                        if (!memberDto.getIsAdmin()) {
+                            memberView.login(memberDto); // 사용자 로그인 된 후 화면
+                        } else {
+                            adminView.login(memberDto); // 관리자 로그인 된 후 화면
+                        }
+                    }else
+                        System.out.println("로그인 실패: 존재하지 않는 회원입니다.");
                     break;
                 case 3: // 종료
                     System.out.println("종료합니다.");

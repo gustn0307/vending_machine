@@ -19,4 +19,8 @@ public class DrinkService {
     public int sell(int id, int menuId) {
         return repository.sell(id, menuId);
     }
+
+    public DrinkDto getById(int menuId) {
+        return repository.findDrinkById(menuId);
+    }
 }

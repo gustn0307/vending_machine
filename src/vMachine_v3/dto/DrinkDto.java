@@ -50,6 +50,6 @@ public class DrinkDto {
 
     @Override
     public String toString() {
-        return id + "\t" + name + "\t" + price + "\t" + stock;
+        return id + "\t\t" + name + "\t\t" + price + "\t\t" + stock;
     }
 }

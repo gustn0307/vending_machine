@@ -23,7 +23,7 @@ public class VendingMain {
         MemberService memberService = new MemberService(repository);
         MemberView memberView = new MemberView(memberService, drinkService, salesService, sc);
         LoginView loginView = new LoginView(memberService, sc);
-        AdminView adminView = new AdminView();
+        AdminView adminView = new AdminView(memberService, sc);
 
         while (true) {
             int input;

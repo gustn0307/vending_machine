@@ -7,6 +7,7 @@ import vMachine_v3.service.DrinkService;
 import vMachine_v3.service.MemberService;
 import vMachine_v3.service.SalesService;
 import vMachine_v3.view.AdminView;
+import vMachine_v3.view.DrinkView;
 import vMachine_v3.view.LoginView;
 import vMachine_v3.view.MemberView;
 
@@ -23,7 +24,8 @@ public class VendingMain {
         MemberService memberService = new MemberService(repository);
         MemberView memberView = new MemberView(memberService, drinkService, salesService, sc);
         LoginView loginView = new LoginView(memberService, sc);
-        AdminView adminView = new AdminView(memberService, sc);
+        DrinkView drinkView = new DrinkView(drinkService, sc);
+        AdminView adminView = new AdminView(drinkView,memberView, memberService, sc);
 
         while (true) {
             int input;

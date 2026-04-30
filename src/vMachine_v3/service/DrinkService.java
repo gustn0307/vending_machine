@@ -23,4 +23,20 @@ public class DrinkService {
     public DrinkDto getById(int menuId) {
         return repository.findDrinkById(menuId);
     }
+
+    public int insert(DrinkDto drinkDto) {
+        return repository.insertMenu(drinkDto);
+    }
+
+    public DrinkDto findMenuById(int id) {
+        return repository.findDrinkById(id);
+    }
+
+    public int update(DrinkDto updateMenu) {
+        return repository.updateMenu(updateMenu);
+    }
+
+    public int delete(int deleteId) {
+        return repository.deleteMenu(deleteId);
+    }
 }

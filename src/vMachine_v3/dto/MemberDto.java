@@ -113,4 +113,9 @@ public class MemberDto {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
+
+    @Override
+    public String toString() {
+        return id + "\t\t\t" + userId + "\t\t" + password + "\t\t" + name + "\t\t" + tel + "\t\t" + balance + "\t\t" + cardNum;
+    }
 }

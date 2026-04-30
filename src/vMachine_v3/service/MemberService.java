@@ -31,4 +31,8 @@ public class MemberService {
     public MemberDto findById(int id) {
         return repository.findMemberById(id);
     }
+
+    public int delete(int deleteId) {
+        return repository.deleteMember(deleteId);
+    }
 }

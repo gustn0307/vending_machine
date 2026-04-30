@@ -6,10 +6,14 @@ import vMachine_v3.service.MemberService;
 import java.util.Scanner;
 
 public class AdminView {
-    MemberService memberService;
-    Scanner sc;
+    private final DrinkView drinkView;
+    private final MemberView memberView;
+    private final MemberService memberService;
+    private final Scanner sc;
 
-    public AdminView(MemberService memberService, Scanner sc) {
+    public AdminView(DrinkView drinkView, MemberView memberView, MemberService memberService, Scanner sc) {
+        this.drinkView = drinkView;
+        this.memberView = memberView;
         this.memberService = memberService;
         this.sc = sc;
     }
@@ -20,20 +24,20 @@ public class AdminView {
         System.out.println("===================");
 
         while (true){
-            System.out.println();
             System.out.println("1. 자판기 관리");
             System.out.println("2. 회원 관리");
             System.out.println("3. 판매 관리");
             System.out.println("4. 로그아웃");
-
+            System.out.print(">  ");
             int choice = sc.nextInt();
             sc.nextLine(); // 버퍼 비우기
 
             switch (choice) {
                 case 1: // 자판기 관리
-                    // ###############
+                    drinkView.vendingManagement();
                     break;
                 case 2: // 회원 관리
+                    memberView.memberManagement();
                     break;
                 case 3: // 판매 관리
                     break;

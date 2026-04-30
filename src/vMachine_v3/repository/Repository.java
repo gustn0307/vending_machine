@@ -279,4 +279,79 @@ public class Repository {
         }
         return salesDtoList;
     }
+
+    public int insertMenu(DrinkDto drinkDto) {
+        int result = 0;
+        PreparedStatement psmt = null;
+
+        try {
+            String sql = "INSERT INTO vending_menu (name, price, stock) VALUES (?, ?, ?)";
+            psmt = conn.prepareStatement(sql);
+            psmt.setString(1, drinkDto.getName());
+            psmt.setInt(2, drinkDto.getPrice());
+            psmt.setInt(3, drinkDto.getStock());
+
+            result = psmt.executeUpdate();
+
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("insertMenu() 오류: "+e.getMessage());
+        }
+        return result;
+    }
+
+    public int updateMenu(DrinkDto updateMenu) {
+        PreparedStatement psmt = null;
+        int result = 0;
+
+        try {
+            String sql = "UPDATE vending_menu SET name = ?,  price = ?, stock = ? WHERE id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setString(1, updateMenu.getName());
+            psmt.setInt(2, updateMenu.getPrice());
+            psmt.setInt(3, updateMenu.getStock());
+            psmt.setInt(4, updateMenu.getId());
+
+            result = psmt.executeUpdate();
+
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("updateMenu() 오류: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public int deleteMenu(int deleteId) {
+        int result = 0;
+        PreparedStatement psmt = null;
+
+        try {
+            String sql = "DELETE FROM vending_menu WHERE id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, deleteId);
+
+            result = psmt.executeUpdate();
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("deleteMenu() 오류: " + e.getMessage());
+        }
+        return result;
+    }
+
+    public int deleteMember(int deleteId) {
+        int result = 0;
+        PreparedStatement psmt = null;
+
+        try {
+            String sql = "DELETE FROM member WHERE id = ?";
+            psmt = conn.prepareStatement(sql);
+            psmt.setInt(1, deleteId);
+
+            result = psmt.executeUpdate();
+            psmt.close();
+        } catch (Exception e) {
+            System.out.println("deleteMember() 오류: " + e.getMessage());
+        }
+        return result;
+    }
 }

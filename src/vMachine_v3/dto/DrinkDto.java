@@ -6,6 +6,12 @@ public class DrinkDto {
     private int price;
     private int stock;
 
+    public DrinkDto(String name, int price, int stock) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public int getId() {
         return id;
     }
@@ -50,6 +56,6 @@ public class DrinkDto {
 
     @Override
     public String toString() {
-        return id + "\t\t" + name + "\t\t" + price + "\t\t" + stock;
+        return id + "\t\t\t" + name + "\t\t" + price + "\t\t" + stock;
     }
 }

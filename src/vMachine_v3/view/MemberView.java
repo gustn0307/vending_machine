@@ -3,11 +3,13 @@ package vMachine_v3.view;
 import vMachine_v3.dto.DrinkDto;
 import vMachine_v3.dto.MemberDto;
 import vMachine_v3.dto.SalesDto;
+import vMachine_v3.exception.InputValidation;
+import vMachine_v3.exception.MyException;
 import vMachine_v3.service.DrinkService;
 import vMachine_v3.service.MemberService;
 import vMachine_v3.service.SalesService;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,6 +18,7 @@ public class MemberView {
     private final DrinkService drinkService;
     private final SalesService salesService;
     private final Scanner sc;
+    private InputValidation validation = new InputValidation();
 
 
     public MemberView(MemberService memberService, DrinkService drinkService, SalesService salesService, Scanner sc) {
@@ -45,8 +48,19 @@ public class MemberView {
 
         System.out.print("비밀번호: ");
         String password = sc.nextLine();
-        System.out.print("이름: ");
-        String name = sc.nextLine();
+        boolean nameChenck = false;
+        String name = "";
+        do { // 이름 검증(한글만 입력받기)
+            System.out.print("이름: ");
+            name = sc.nextLine();
+            try {
+                validation.nameCheck(name);
+                nameChenck = true;
+            } catch (MyException e) {
+                System.out.println(e.getMessage());
+            }
+        } while (!nameChenck);
+
         System.out.print("전화번호: ");
         String tel = sc.nextLine();
 
@@ -63,6 +77,11 @@ public class MemberView {
             System.out.print("카드번호(16자리): "); // 카드번호 유효성: Luhn 알고리즘(CH 07 실습 10번)
 
             strCreditDigits = sc.next().split(""); // 입력받아서 한글자씩 배열에 저장
+            sc.nextLine(); // 버퍼 비우기
+            if (strCreditDigits.length != 16) {
+                System.out.println("16자리를 입력해주세요.");
+                return;
+            }
             int[] intCreditDigits = new int[strCreditDigits.length]; // 계산 및 비교를 위해 String 타입을 int형으로 변환하기 위해 필요한 배열
 
             for (int i = 0; i < intCreditDigits.length; i++) // 계산이나 비교를 위해 String 타입을 int형으로 변환
@@ -226,9 +245,22 @@ public class MemberView {
                 System.out.println("수정 전 회원 비밀번호: " + originMember.getPassword());
                 System.out.print("수정할 비밀번호: ");
                 String updatePassword = sc.nextLine();
+
+                boolean nameCheck = false;
+                String updateName = "";
                 System.out.println("수정 전 회원 이름: " + originMember.getName());
-                System.out.print("수정할 이름: ");
-                String updateName = sc.nextLine();
+
+                do { // 수정할 이름 검증 (한글만 입력받기)
+                    System.out.print("수정할 이름: ");
+                    updateName = sc.nextLine();
+                    try {
+                        validation.nameCheck(updateName);
+                        nameCheck = true;
+                    }catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                }while (!nameCheck);
+
                 System.out.println("수정 전 회원 전화번호: " + originMember.getTel());
                 System.out.print("수정할 전화번호: ");
                 String updateTel = sc.nextLine();
@@ -250,8 +282,15 @@ public class MemberView {
                     System.out.println("수정 전 회원 카드번호: " + originMember.getCardNum());
                     System.out.print("수정할 카드번호(16자리): "); // 카드번호 유효성: Luhn 알고리즘(CH 07 실습 10번)
 
+                    // 4539148803436467
+                    // 4532015112830366
                     strCreditDigits = sc.next().split(""); // 입력받아서 한글자씩 배열에 저장
-                    
+                    sc.nextLine(); // 버퍼 비우기
+                    if (strCreditDigits.length != 16) {
+                        System.out.println("16자리를 입력해주세요.");
+                        return;
+                    }
+
                     int[] intCreditDigits = new int[strCreditDigits.length]; // 계산 및 비교를 위해 String 타입을 int형으로 변환하기 위해 필요한 배열
 
                     for (int i = 0; i < intCreditDigits.length; i++) // 계산이나 비교를 위해 String 타입을 int형으로 변환

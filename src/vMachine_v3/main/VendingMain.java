@@ -25,7 +25,7 @@ public class VendingMain {
         MemberView memberView = new MemberView(memberService, drinkService, salesService, sc);
         LoginView loginView = new LoginView(memberService, sc);
         DrinkView drinkView = new DrinkView(drinkService, sc);
-        AdminView adminView = new AdminView(drinkView,memberView, memberService, sc);
+        AdminView adminView = new AdminView(drinkView,memberView,memberService, drinkService, salesService, sc);
 
         while (true) {
             int input;
@@ -35,7 +35,7 @@ public class VendingMain {
                 System.out.println("=====================================");
                 System.out.println("1. 회원가입  2. 로그인  3. 종료");
                 System.out.print(">  ");
-                input = sc.nextInt(); // ## 타입 다른 입력했을 때 예외처리 필요 ##
+                input = sc.nextInt(); // ## 타입 다르게 입력했을 때 예외처리 필요 ##
                 sc.nextLine(); // 버퍼 비우기
                 if (input < 0 || input > 3) {
                     System.out.println("1 ~ 3 중 하나를 입력해주세요.");

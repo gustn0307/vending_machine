@@ -354,4 +354,86 @@ public class Repository {
         }
         return result;
     }
+
+    public List<SalesDto> findAllSales() {
+        List<SalesDto> salesDtoList = new ArrayList<>();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "SELECT * FROM sales";
+            psmt = conn.prepareStatement(sql);
+
+            while (rs.next()){
+                SalesDto salesDto = new SalesDto(
+                        rs.getInt("id"),
+                        rs.getInt("member_id"),
+                        rs.getInt("menu_id"),
+                        rs.getInt("price"),
+                        rs.getObject("sold_at", LocalDateTime.class)
+                );
+                salesDtoList.add(salesDto);
+            }
+            psmt.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("findAllSales() 오류: "+e.getMessage());
+        }
+
+        return salesDtoList;
+    }
+
+    public List<SalesDto> getSummaryByMenu() {
+        List<SalesDto> salesDtoList = new ArrayList<>();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "select menu_id, count(*), sum(price) from sales group by menu_id;";
+            psmt = conn.prepareStatement(sql);
+
+            rs = psmt.executeQuery();
+
+            while (rs.next()){
+                SalesDto salesDto = new SalesDto(
+                        rs.getInt("menu_id"),
+                        rs.getInt("count(*)"),
+                        rs.getInt("sum(price)")
+                );
+                salesDtoList.add(salesDto);
+            }
+            psmt.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("findAllSales() 오류: "+e.getMessage());
+        }
+
+        return salesDtoList;
+    }
+
+    public List<SalesDto> getSummaryByMember() {
+        List<SalesDto> salesDtoList = new ArrayList<>();
+        PreparedStatement psmt = null;
+        ResultSet rs = null;
+
+        try {
+            String sql = "select member_id, sum(price) from sales group by member_id;";
+            psmt = conn.prepareStatement(sql);
+
+            rs = psmt.executeQuery();
+            while (rs.next()){
+                SalesDto salesDto = new SalesDto(
+                        rs.getInt("member_id"),
+                        rs.getInt("sum(price)")
+                );
+                salesDtoList.add(salesDto);
+            }
+            psmt.close();
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("findAllSales() 오류: "+e.getMessage());
+        }
+
+        return salesDtoList;
+    }
 }

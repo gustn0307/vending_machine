@@ -8,6 +8,35 @@ public class SalesDto {
     private  int menu_id;
     private int price;
     private LocalDateTime sold_at;
+    private int count;
+    private int sum;
+
+    public SalesDto(int menu_id, int count, int sum) {
+        this.menu_id = menu_id;
+        this.count = count;
+        this.sum = sum;
+    }
+
+    public SalesDto(int memberId, int sum) {
+        this.member_id = memberId;
+        this.sum = sum;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
 
     public int getId() {
         return id;

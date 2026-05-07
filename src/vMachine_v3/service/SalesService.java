@@ -15,4 +15,12 @@ public class SalesService {
     public List<SalesDto> getByMember(int id) {
         return repository.findAllSalesByMember(id);
     }
+
+    public List<SalesDto> getSummaryByMenu() {
+        return repository.getSummaryByMenu();
+    }
+
+    public List<SalesDto> getSummaryByMember() {
+        return repository.getSummaryByMember();
+    }
 }
